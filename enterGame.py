@@ -1,8 +1,6 @@
 import time
 import csv
 
-print(time.gmtime())
-
 def playGame():
     input("\nWelcome to the Enter Game.\nWhen you are ready to play, press enter twice as fast as possible.\n\n>") #Introduces the game
     startTime = time.time() #After enter is pressed the first time, the time is recorded
@@ -44,15 +42,18 @@ def writeCsv(newHighScores): #this function re-writes the csv file, now includin
     for record in newHighScores:
         write.writerow(record)
 
-def printScores(newHighScores): #prints the top 3 after adding the user's new score
-    print("The Current Top 3 Are:\n-------------------")
-    for i in range(3):
+def printScores(newHighScores,ranger): #prints the top 3 after adding the user's new score
+    if ranger == 3:
+        print("The Current Top 3 Are:\n-------------------")
+    else:
+        print("\nAll High Scores\n-----------------")
+    for i in range(ranger):
         print(str(newHighScores[i][0])+" - "+str(newHighScores[i][1])+"ms")
 
 def getUserName(highScores):
     runAgain = True
     while runAgain == True:
-        userName = input("Enter your chosen player name: ") #gets the user's name choice
+        userName = input("\nEnter your chosen player name: ") #gets the user's name choice
         runAgain = False
         for i in highScores: #for every high score record
             if i[0] == userName: #if the record already has the same name as the user's choice
@@ -63,12 +64,34 @@ def getUserName(highScores):
             print("Sorry, that name is already taken or is invalid")
     return userName #return name only after loop is ended, so the username must be unique and valid
 
-read = openCsv()
-highScores = compileHighScores(read)
+def continueGame():
+    answer = ""
+    while answer not in ["C","X","H","c","x","h"]:
+        answer = input("\nEnter C to continue and try again, H to view all highscores, or X to exit the game: ")
+        if answer not in ["C","X","H","c","x","h"]:
+            print("Please enter a valid answer")
+    if answer in ["H","h"]:
+        read = openCsv()
+        highScores = compileHighScores(read)
+        printScores(newHighScores,len(newHighScores))
+    else:
+        return answer.upper()
 
-userName = getUserName(highScores)
-userTime = round(playGame() * 1000,2)
-print("Your time was "+str(userTime)+"ms\n")
-newHighScores = determineHighScore(userTime,userName,highScores)
-printScores(newHighScores)
-writeCsv(newHighScores)
+
+
+runGame = True
+while runGame == True:
+    read = openCsv()
+    highScores = compileHighScores(read)
+
+    userName = getUserName(highScores)
+    userTime = round(playGame() * 1000,2)
+    print("Your time was "+str(userTime)+"ms\n")
+    newHighScores = determineHighScore(userTime,userName,highScores)
+    printScores(newHighScores,3)
+    writeCsv(newHighScores)
+    continueGameChoice = continueGame()
+    if continueGameChoice == "X":
+        print("\nThanks for playing The Enter Game!")
+        runGame = False
+
