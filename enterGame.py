@@ -38,11 +38,11 @@ def determineHighScore(userTime,userName,highScores):
         newHighScores.append([userName,userTime]) #add it
     return newHighScores
 
-def writeCsv(newHighScores,read): #this function re-writes the csv file, now including the new user's score
-    write = open("highScores.csv")
+def writeCsv(newHighScores): #this function re-writes the csv file, now including the new user's score
+    write = open("highScores.csv","w")
     write = csv.writer(write)
     for record in newHighScores:
-        write.writeline(record)
+        write.writerow(record)
 
 def printScores(newHighScores): #prints the top 3 after adding the user's new score
     print("The Current Top 3 Are:\n-------------------")
@@ -71,3 +71,4 @@ userTime = round(playGame() * 1000,2)
 print("Your time was "+str(userTime)+"ms\n")
 newHighScores = determineHighScore(userTime,userName,highScores)
 printScores(newHighScores)
+writeCsv(newHighScores)
