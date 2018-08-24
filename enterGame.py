@@ -44,7 +44,7 @@ def writeCsv(newHighScores): #this function re-writes the csv file, now includin
 
 def printScores(newHighScores,ranger): #prints the top 3 after adding the user's new score
     if ranger == 3:
-        print("The Current Top 3 Are:\n-------------------")
+        print("\nThe Current Top 3 Are:\n-------------------")
     else:
         print("\nAll High Scores\n-----------------")
     for i in range(ranger):
@@ -88,7 +88,8 @@ while runGame == True:
     userTime = round(playGame() * 1000,2)
     print("Your time was "+str(userTime)+"ms\n")
     newHighScores = determineHighScore(userTime,userName,highScores)
-    printScores(newHighScores,3)
+    if len(newHighScores) > 2:
+        printScores(newHighScores,3)
     writeCsv(newHighScores)
     continueGameChoice = continueGame()
     if continueGameChoice == "X":
